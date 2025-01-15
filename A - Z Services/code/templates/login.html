@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static' , filename='login.css')}}"
+    />
+  </head>
+  <body>
+    <!-- flash message block -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <script>
+      {% for category, message in messages %}
+        alert("{{ message | escape }}");
+      {% endfor %}
+    </script>
+    {% endif %} {% endwith %}
+
+    <img
+      src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVsaDdjdzJtdnQ3eGlhMXduODhsaHdsZTd3ODdwZTdhbTNuOTU4biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/WIwxxWqhvbKSZ1SyAW/giphy.gif"
+      alt="lock sticker"
+      class="login_img"
+    />
+    <div class="container">
+      <form method="post" action="{{ url_for('login') }}">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" />
+        <button type="submit">Login</button>
+      </form>
+      <p>
+        Don't have an account?
+        <a href="{{url_for('signup_customer')}}">Sign up as Customer</a> or
+        <a href="{{url_for('signup_professional')}}">Sign up as Professional</a>
+      </p>
+    </div>
+  </body>
+</html>

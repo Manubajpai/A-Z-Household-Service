@@ -1,0 +1,190 @@
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f4f4f4;
+}
+
+h2,
+h3 {
+  margin: 0;
+  padding: 0.5em;
+  text-align: center;
+  font-family: "Merienda";
+  color: #808080;
+}
+
+header {
+  background-color: #e0e0e0;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h3 {
+  font-family: "Merienda";
+  color: #808080;
+  font-size: 25px;
+}
+
+nav a {
+  margin-right: 15px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Service Section */
+.service-section {
+  margin: 20px auto;
+  text-align: center;
+}
+
+.service-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.service-buttons button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.service-buttons button:hover {
+  background-color: #1565c0;
+}
+
+.job-listings {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.job-item {
+  background-color: white;
+  padding: 15px;
+  margin: 10px auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.job-item button {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.job-item button:hover {
+  background-color: #c62828;
+}
+
+/* History Section */
+.history-section {
+  margin: 20px auto;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+  max-width: 90%;
+}
+
+.history-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.history-section table thead {
+  background-color: #f1f1f1;
+}
+
+.history-section table th,
+.history-section table td {
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 10px;
+}
+
+.history-section table th {
+  font-weight: bold;
+}
+
+.history-section button {
+  background-color: #ffa000;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.history-section button:hover {
+  background-color: #f57c00;
+}
+
+/* Job Listings Section - Table Style */
+.job-listings {
+  margin: 20px auto;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+  max-width: 900px;
+  width: 100%;
+  overflow-x: auto;
+  text-align: center;
+}
+
+.job-listings table {
+  width: 50%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.job-listings table thead {
+  background-color: #f1f1f1;
+}
+
+.job-listings table th,
+.job-listings table td {
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.job-listings table th {
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.job-listings table button {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.job-listings table button:hover {
+  background-color: #b71c1c;
+}

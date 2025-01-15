@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static' , filename = 'customer_dashboard.css')}}"
+    />
+  </head>
+  <body>
+    <!-- flash message block -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <script>
+      {% for category, message in messages %}
+        alert("{{ message | escape }}");
+      {% endfor %}
+    </script>
+    {% endif %} {% endwith %}
+
+    <header>
+      <h3>Your Dashboard</h3>
+      <nav>
+        <a href="{{url_for('customer_dashboard')}}">Home</a>
+        <a href="{{url_for('customer_summary')}}">Summary</a>
+        <a href="{{url_for('customer_search')}}">Search</a>
+        <a href="{{url_for('customer_profile')}}">Profile</a>
+        <a href="{{url_for('logout')}}">Logout</a>
+      </nav>
+    </header>
+
+    <section class="service-section">
+      <h2>Looking For?</h2>
+      <div class="service-buttons">
+        {% for service in services %}
+        <button onclick="fetchJobs('{{service.id}}')">{{service.name}}</button>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="job-listings" id="job-listings">
+      <table id="jobs-table" style="display: none">
+        <thead>
+          <tr>
+            <th>Job Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!--jobs display-->
+        </tbody>
+      </table>
+    </section>
+
+    <section class="history-section">
+      <h2>Service History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Service Name</th>
+            <th>Professional Name</th>
+            <th>Phone No.</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for service_request in service_requests %}
+          <tr>
+            <td>{{service_request.id}}</td>
+            <td>{{service_request.service.name}}</td>
+            <td>
+              {{service_request.professional.name if
+              service_request.professional else "Not Assigned" }}
+            </td>
+            <td>
+              {{service_request.professional.phone_no if
+              service_request.professional else "N/A" }}
+            </td>
+            <td>
+              {% if service_request.status == 'Active'%}
+              <button
+                onclick="window.location.href='{{ url_for('customer_remarks', request_id=service_request.id) }}'"
+              >
+                Close it?
+              </button>
+              {% else %} {{service_request.status}} {% endif %}
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <script>
+      function fetchJobs(serviceId) {
+        fetch(`/get_jobs/${serviceId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const jobsTable = document.getElementById("jobs-table");
+            const tbody = jobsTable.querySelector("tbody");
+            tbody.innerHTML = "";
+
+            if (data.length === 0) {
+              alert("No jobs available for this service.");
+            }
+
+            data.forEach((job) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                    <td>${job.name}</td>
+                    <td>${job.description}</td>
+                    <td>${job.base_price}</td>
+                    <td><button onclick="bookJob(${job.id})">Book</button></td>
+                `;
+              tbody.appendChild(row);
+            });
+
+            jobsTable.style.display = "block";
+          })
+          .catch((error) => {
+            console.error("Error fetching jobs:", error);
+          });
+      }
+
+      function bookJob(serviceId) {
+        fetch(`/book_job/${serviceId}`, { method: "POST" })
+          .then((response) => {
+            if (!response.ok) {
+              return response.json().then((data) => {
+                alert(data.error || "Error booking the job.");
+                throw new Error("Booking failed.");
+              });
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Service request created:", data);
+
+            // Remove the empty state if present
+            const serviceHistoryBody = document.querySelector(
+              ".history-section tbody"
+            );
+            const emptyRow =
+              serviceHistoryBody.querySelector("tr td[colspan='5']");
+            if (emptyRow) emptyRow.parentNode.remove();
+
+            // Add the new booking to the history table
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${data.id}</td>
+                <td>${data.service_name}</td>
+                <td>${data.professional_name || "Not Assigned"}</td>
+                <td>${data.professional_phone || "N/A"}</td>
+                <td>
+                    ${
+                      data.status === "Requested"
+                        ? "Awaiting Professional Approval"
+                        : data.status === "Active"
+                        ? `<button onclick="window.location.href='/customer_remarks/${data.id}'">Close it?</button>`
+                        : data.status
+                    }
+                </td> 
+            `;
+            serviceHistoryBody.appendChild(newRow);
+          })
+          .catch((error) => {
+            console.error("Error booking the job:", error);
+          });
+      }
+    </script>
+  </body>
+</html>

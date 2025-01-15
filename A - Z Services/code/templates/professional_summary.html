@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Summary</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static' , filename = 'customer_summary.css')}}"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <header>
+      <h3>Your Dashboard</h3>
+      <nav>
+        <a href="{{url_for('professional_dashboard')}}">Home</a>
+        <a href="{{url_for('professional_summary')}}">Summary</a>
+        <a href="{{url_for('professional_search')}}">Search</a>
+        <a href="{{url_for('professional_profile')}}">Profile</a>
+        <a href="{{url_for('logout')}}">Logout</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Service Requests</h2>
+      <canvas id="serviceChart"></canvas>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch('{{ url_for("professional_summary_data") }}')
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const ctx = document
+              .getElementById("serviceChart")
+              .getContext("2d");
+            new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: ["Closed", "Active", "Rejected"],
+                datasets: [
+                  {
+                    label: "Number of Requests",
+                    data: [data.closed, data.active, data.rejected],
+                    backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
+                    borderColor: ["#388E3C", "#1976D2", "#FFA000"],
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              },
+            });
+          })
+          .catch((err) => console.error("Error fetching data:", err));
+      });
+    </script>
+  </body>
+</html>

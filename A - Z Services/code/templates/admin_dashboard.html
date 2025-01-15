@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static' , filename = 'admin_dashboard.css')}}"
+    />
+    
+  </head>
+  <body>
+
+    <header>
+      <h3>Welcome to Admin</h3>
+      <nav>
+        <a href="{{url_for('admin_dashboard')}}">Home</a>
+        <a href="{{url_for('admin_summary')}}">Summary</a>
+        <a href="{{url_for('logout')}}">Logout</a>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h2>Admin Dashboard</h2>
+        <div>
+          <button onclick="showSection('services')">View Services</button>
+          <button onclick="showSection('professionals')">
+            View Professionals
+          </button>
+          <button onclick="showSection('customers')">View Customers</button>
+          <button onclick="showSection('service_requests')">
+            View Service Requests
+          </button>
+        </div>
+      </section>
+
+      <!--universal search button-->
+      <section>
+        <input type="text" id="searchInput" onkeyup="filterTables()" placeholder="Search for Keyword">
+      </section>
+
+
+      <!-- services section  -->
+      <section id="services" class="dashboard-section" style="display: none">
+        <h3>Services</h3>
+        <table class="searchable-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Service Name</th>
+              <th>Description</th>
+              <th>Base Price</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for service in services %}
+            <tr>
+              <form
+                method="POST"
+                action="{{url_for('edit_service' , service_id=service.id)}}"
+              >
+                <td>{{service.id}}</td>
+                <td>
+                  <input
+                    type="text"
+                    name="name"
+                    value="{{service.name}}"
+                    required
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="description"
+                    value="{{service.description}}"
+                    required
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    name="base_price"
+                    value="{{service.base_price}}"
+                    required
+                  />
+                </td>
+                <td>
+                  <button type="submit">Save</button>
+                </form>
+                <form
+                    action="{{url_for('delete_service' , service_id=service.id)}}"
+                    style="display: inline"
+                    method="post"
+                  >
+                    <button type="submit">Delete</button>
+                  </form>
+                </td>
+              
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <a href="{{url_for('create_service')}}" class="btn">+ New Service</a>
+      </section>
+
+      <!-- professional section -->
+      <section
+        id="professionals"
+        class="dashboard-section"
+        style="display: none"
+      >
+        <h3>Professionals</h3>
+        <table class="searchable-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Email</th>
+              <th>Name</th>
+              <th>Experience</th>
+              <th>Service Name</th>
+              <th>Address</th>
+              <th>Pincode</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for professional in professionals %}
+            <tr>
+              <td>{{professional.id}}</td>
+              <td>{{professional.email}}</td>
+              <td>{{professional.name}}</td>
+              <td>{{professional.experience}}</td>
+              <td>{{professional.service_name}}</td>
+              <td>{{professional.address}}</td>
+              <td>{{professional.pincode}}</td>
+              <td>
+                <form
+                  action="{{url_for('approve_professional' , professional_id = professional.id)}}"
+                  style="display: inline"
+                  method="POST"
+                >
+                  <button type="submit">Approve</button>
+                </form>
+                <form
+                  action="{{url_for('reject_professional' , professional_id = professional.id)}}"
+                  style="display: inline"
+                  method="POST"
+                >
+                  <button type="submit">Reject</button>
+                </form>
+                <form
+                  action="{{url_for('delete_professional' , professional_id = professional.id)}}"
+                  style="display: inline"
+                  method="POST"
+                >
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+
+      <!-- customer -->
+       <section class="dashboard-section" id="customers" style="display: none;">
+        <h3>Customers</h3>
+        <table class="searchable-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>PinCode</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                    <tr>
+                        <td>{{customer.id}}</td>
+                        <td>{{customer.email}}</td>
+                        <td>{{customer.name}}</td>
+                        <td>{{customer.address}}</td>
+                        <td>{{customer.pincode}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+       </section>
+
+      <!-- service requests -->
+      <section
+        id="service_requests"
+        class="dashboard-section"
+        style="display: none"
+      >
+        <h3>Service Requests</h3>
+        <table class="searchable-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Assigned Professional</th>
+              <th>Requested Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for request in service_requests %}
+            <tr>
+              <td>{{request.id}}</td>
+              <td>
+                {{request.professional.name if request.professional else
+                'Unassigned'}}
+              </td>
+              <td>{{request.requested_date}}</td>
+              <td>{{request.status}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll(".dashboard-section");
+            sections.forEach((section) => {
+            if (section.id == sectionId) {
+                section.style.display = "block";
+            } else {
+                section.style.display = "none";
+            }
+            });
+        }
+
+        function filterTables() {
+            let input = document.getElementById('searchInput');
+            let filter = input.value.toLowerCase(); 
+            let tables = document.getElementsByClassName('searchable-table'); 
+
+            for (let table of tables) {
+                let rows = table.getElementsByTagName('tr'); 
+                for (let i = 1; i < rows.length; i++) { 
+                    let cells = rows[i].getElementsByTagName('td'); 
+                    let match = false;
+                    
+                    for (let cell of cells) {
+                        if (cell.textContent.toLowerCase().includes(filter)) {
+                            match = true;
+                            break;
+                        }
+                  
+                        let inputs = cell.getElementsByTagName('input');
+                        for (let input of inputs) {
+                            if (input.value.toLowerCase().includes(filter)) {
+                                match = true;
+                                break;
+                            }
+                        }
+
+                        if (match) break;
+                    }
+
+                    rows[i].style.display = match ? '' : 'none';
+                }
+            }
+        }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        showSection("services");
+      });
+    </script>
+  </body>
+</html>

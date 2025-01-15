@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Search</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static' , filename='customer_search.css')}}"
+    />
+  </head>
+  <body>
+    <header>
+      <h3>Search</h3>
+      <nav>
+        <a href="{{url_for('customer_dashboard')}}">Home</a>
+        <a href="{{url_for('customer_summary')}}">Summary</a>
+        <a href="{{url_for('customer_search')}}">Search</a>
+        <a href="{{url_for('customer_profile')}}">Profile</a>
+        <a href="{{url_for('logout')}}">Logout</a>
+      </nav>
+    </header>
+
+    <div class="search-bar">
+      <form action="{{url_for('customer_search')}}" , method="POST">
+        <input
+          type="text"
+          name="search_query"
+          placeholder="Please enter the search query..."
+          required
+        />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    {% if services %}
+    <h2>Available Services</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Service Name</th>
+          <th>Description</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for service in services %}
+        <tr>
+          <td>{{service.name}}</td>
+          <td>{{service.description}}</td>
+          <td>{{service.base_price}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %} {% if professionals %}
+    <h2>Available Professionals</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone No.</th>
+          <th>Pin Code</th>
+          <th>Experience</th>
+          <th>Service Offered</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for professional in professionals %}
+        <tr>
+          <td>{{professional.name}}</td>
+          <td>{{professional.email}}</td>
+          <td>{{professional.phone_no}}</td>
+          <td>{{professional.pincode}}</td>
+          <td>{{professional.experience}}</td>
+          <td>{{professional.service_name}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </body>
+</html>

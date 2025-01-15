@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.profile-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 50px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.profile-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: "Merienda";
+  color: #808080;
+}
+
+.profile-container input,
+.profile-container textarea {
+  padding: 8px;
+  margin-bottom: 15px;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.profile-container button {
+  background-color: #1976d2;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 230px;
+}
+
+.profile-container button:hover {
+  background-color: #1565c0;
+}
+
+header {
+  background-color: #e0e0e0;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h3 {
+  font-family: "Merienda";
+  color: #808080;
+  font-size: 25px;
+}
+
+nav a {
+  margin-right: 15px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}

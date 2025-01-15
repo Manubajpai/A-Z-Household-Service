@@ -1,0 +1,91 @@
+header {
+  background-color: #e0e0e0; /* Light blue-gray color */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+nav a {
+  margin-right: 15px;
+  text-decoration: none;
+  color: #007bff; /* Blue link color */
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+body {
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 70px;
+  font-family: "Merienda";
+  font-weight: normal;
+  color: #808080;
+  margin-bottom: 20px;
+}
+
+#banner {
+  width: 92%;
+  height: 500px;
+  object-fit: cover;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#brand-name {
+  font-family: "Merienda";
+  color: #808080;
+  font-size: 30px;
+}
+
+h2 {
+  font-family: "Merienda";
+  font-size: 40px;
+  font-weight: normal;
+  text-align: center;
+  color: #808080;
+}
+
+.about {
+  max-width: 1000px;
+  margin: 100px auto 0;
+  display: block;
+}
+
+.about-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.about-image {
+  height: 320px;
+  flex-shrink: 0;
+}
+
+.about-text {
+  flex: 1;
+  margin-right: 70px;
+}
+
+hr {
+  width: 92%;
+  margin: 20px auto;
+  color: #808080;
+  border-style: dotted none none;
+  border-width: 10px;
+}

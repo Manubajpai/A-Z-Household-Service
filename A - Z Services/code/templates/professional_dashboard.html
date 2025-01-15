@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professional Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static' , filename='professional_dashboard.css')}}"
+    />
+  </head>
+  <body>
+    <!-- flash message block -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <script>
+      {% for category, message in messages %}
+        alert("{{ message | escape }}");
+      {% endfor %}
+    </script>
+    {% endif %} {% endwith %}
+
+    <header>
+      <h3>Your Dashboard</h3>
+      <nav>
+        <a href="{{url_for('professional_dashboard')}}">Home</a>
+        <a href="{{url_for('professional_summary')}}">Summary</a>
+        <a href="{{url_for('professional_search')}}">Search</a>
+        <a href="{{url_for('professional_profile')}}">Profile</a>
+        <a href="{{url_for('logout')}}">Logout</a>
+      </nav>
+    </header>
+
+    <div class="available_services">
+      <h2>Available Services</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Customer Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Pin Code</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for request in service_requests %}
+          <tr>
+            <td>{{request.customer.name}}</td>
+            <td>{{request.customer.email}}</td>
+            <td>{{request.customer.address}}</td>
+            <td>{{request.customer.pincode}}</td>
+            <td>{{request.service.base_price}}</td>
+            <td>
+              <form method="POST">
+                <input type="hidden" name="request_id" value="{{request.id}}" />
+                <button type="submit" name="action" value="accept">
+                  Accept
+                </button>
+                <button type="submit" name="action" value="reject">
+                  Reject
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="closed_services">
+      <h2>Closed Services</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Customer Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Pin Code</th>
+            <th>Date</th>
+            <th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for request in closed_requests %}
+          <tr>
+            <td>{{request.customer.name}}</td>
+            <td>{{request.customer.email}}</td>
+            <td>{{request.customer.address}}</td>
+            <td>{{request.customer.pincode}}</td>
+            <td>{{request.requested_date.strftime('%d-%m-%y')}}</td>
+            <td>{{request.remarks or 'N/A'}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Summary for Admin</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static' , filename = 'customer_summary.css')}}"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <header>
+      <h3>App Summary</h3>
+      <nav>
+        <a href="{{url_for('admin_dashboard')}}">Home</a>
+        <a href="{{url_for('admin_summary')}}">Summary</a>
+        <a href="{{url_for('logout')}}">Logout</a>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h2>Services Count</h2>
+        <canvas id="servicesChart"></canvas>
+      </section>
+      <section>
+        <h2>Professionals Per Service</h2>
+        <canvas id="professionalsChart"></canvas>
+      </section>
+      <section>
+        <h2>Service Requests Status</h2>
+        <canvas id="requestsChart"></canvas>
+      </section>
+    </main>
+
+    <script>
+      const servicesData = {{services_data|tojson|safe}};
+      const professionalsData = {{professionals_data|tojson|safe}};
+      const requestsData = {{requests_data|tojson|safe}};
+
+      // first chart
+      const serviceNames = servicesData.map(item => item.name);
+      const servicesCounts = servicesData.map(item => item.count);
+
+      const servicesChart = new Chart(document.getElementById('servicesChart'),{
+        type: 'bar',
+        data: {
+          labels: serviceNames,
+          datasets:[{
+            label: 'Count of Services',
+            data: servicesCounts,
+            backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
+            borderColor: ["#388E3C", "#1976D2", "#FFA000"],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {display: false}
+          },
+          scales: {
+            y:{beginAtZero: true}
+          }
+        }
+      });
+
+      // second chart
+      const professionalNames = professionalsData.map(item => item.name);
+      const professionalCounts = professionalsData.map(item => item.count);
+
+      const professionalsChart = new Chart(document.getElementById('professionalsChart'), {
+        type: 'bar',
+        data: {
+          labels: professionalNames,
+          datasets: [{
+            label: 'Count of Professionals',
+            data: professionalCounts,
+            backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
+            borderColor: ["#388E3C", "#1976D2", "#FFA000"],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+
+      // third chart
+      const requestStatuses = requestsData.map(item => item.status);
+      const requestCounts = requestsData.map(item => item.count);
+
+      const requestsChart = new Chart(document.getElementById('requestsChart') , {
+        type: 'bar',
+        data: {
+          labels: requestStatuses,
+          datasets: [{
+            label: 'Count of requests',
+            data: requestCounts,
+            backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
+            borderColor: ["#388E3C", "#1976D2", "#FFA000"],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {display:false}
+          },
+          scales:{
+            y: {beginAtZero: true}
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

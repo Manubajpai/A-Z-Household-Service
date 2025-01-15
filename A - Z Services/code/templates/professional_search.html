@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static' , filename = 'professional_search.css')}}"
+    />
+  </head>
+  <body>
+    <header>
+      <h3>Your Dashboard</h3>
+      <nav>
+        <a href="{{url_for('professional_dashboard')}}">Home</a>
+        <a href="{{url_for('professional_summary')}}">Summary</a>
+        <a href="{{url_for('professional_search')}}">Search</a>
+        <a href="{{url_for('professional_profile')}}">Profile</a>
+        <a href="{{url_for('logout')}}">Logout</a>
+      </nav>
+    </header>
+
+    <section id="service_requests" class="dashboard-section">
+      <h2>Service Requests</h2>
+
+      <section class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          onkeyup="filterTables()"
+          placeholder="Search"
+        />
+      </section>
+
+      <table class="searchable-table">
+        <thead>
+          <tr>
+            <th>Customer Name</th>
+            <th>Address</th>
+            <th>Pincode</th>
+            <th>Email</th>
+            <th>Requested Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for request in service_requests %}
+          <tr>
+            <td>{{request.customer.name}}</td>
+            <td>{{request.customer.address}}</td>
+            <td>{{request.customer.pincode}}</td>
+            <td>{{request.customer.email}}</td>
+            <td>{{request.requested_date}}</td>
+            <td>
+              {% if request.status == 'Requested' %}
+              <form
+                action="{{url_for('accept_service_request' , request_id=request.id)}}"
+                method="POST"
+                style="display: inline"
+              >
+                <button type="submit">Accept</button>
+              </form>
+              <form
+                action="{{url_for('reject_service_request' , request_id=request.id)}}"
+                method="POST"
+                style="display: inline"
+              >
+                <button type="submit">Reject</button>
+              </form>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <script>
+      function filterTables() {
+        let input = document.getElementById("searchInput");
+        let filter = input.value.toLowerCase();
+        let table = document.querySelector(".searchable-table");
+        let rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+          let cells = rows[i].getElementsByTagName("td");
+          let match = false;
+
+          for (let j = 0; j < cells.length; j++) {
+            if (cells[j].textContent.toLowerCase().includes(filter)) {
+              match = true;
+              break;
+            }
+          }
+
+          rows[i].style.display = match ? "" : "none";
+        }
+      }
+    </script>
+  </body>
+</html>
